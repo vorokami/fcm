@@ -39,9 +39,6 @@ func NewClient(firebaseAuthKey map[string]string) (*Client, error) {
 
 type SendPush interface {
 		SendPushNotification(context.Context, *PushNotification) error
-
-		// initiation of mass distribution of notifications without badges
-		SendMassPushNotification(*PushNotification) error
 	}
 
 func (c *Client) SendPushNotification(ctx context.Context, pushNotification *PushNotification) error {
