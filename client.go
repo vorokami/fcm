@@ -63,7 +63,6 @@ func (c *Client) SendPushNotification(ctx context.Context, pushNotification *Pus
 					Icon:              "fcm_push_icon",
 					Color:             "#f45342",
 					ClickAction:       "FCM_PLUGIN_ACTIVITY",
-					NotificationCount: &pushNotification.Badge,
 					Sound:             "sword",
 					ChannelID:         "notification",
 				},
@@ -78,7 +77,6 @@ func (c *Client) SendPushNotification(ctx context.Context, pushNotification *Pus
 				},
 				Payload: &messaging.APNSPayload{
 					Aps: &messaging.Aps{
-						Badge: &pushNotification.Badge,
 						Sound: "default",
 						CustomData: map[string]interface{}{
 							"url": "/tabs/notifications",
@@ -90,6 +88,11 @@ func (c *Client) SendPushNotification(ctx context.Context, pushNotification *Pus
 				},
 			},
 			Tokens: tokens,
+		}
+
+		if (pushNotification.Badge != 0) {
+			message.Android.Notification.NotificationCount = &pushNotification.Badge
+			message.APNS.Payload.Aps.Badge = &pushNotification.Badge
 		}
 
 		_, err := c.fcmClient.SendMulticast(ctx, &message)
